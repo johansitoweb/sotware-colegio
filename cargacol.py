@@ -1,24 +1,31 @@
-import os
+import tkinter as tk
+import time
 
-KEYS = ["/","-","\\"];
+KEYS = ["/", "-", "\\"]
 
-def loading_effect(time):
-  cont = 0
-  time_2 = 1
+def loading_effect(duration):
+    cont = 0
+    time_elapsed = 0
 
-  while(time_2 < time):
-    for key in KEYS:
-        os.system('cls')
-        print(key)
-
-        if cont <= 1:
-          cont+=1
+    def update_label():
+        nonlocal cont, time_elapsed
+        if time_elapsed < duration:
+            key = KEYS[cont % len(KEYS)]
+            label.config(text=key)
+            cont += 1
+            time_elapsed += 1
+            root.after(200, update_label)  # Actualiza cada 200ms
         else:
-          cont=0
-    time_2+=1
+            label.config(text="El Proceso se ha completado exitosamente!")
 
-  os.system('cls')
+# Configuración de la ventana principal
+root = tk.Tk()
+root.title("Loading Effect")
 
-  print("El Proceso se ha completado exitosamente!")
+label = tk.Label(root, text="", font=("Arial", 24))
+label.pack(pady=20)
 
+# Inicia la animación
 loading_effect(100)
+
+root.mainloop()
